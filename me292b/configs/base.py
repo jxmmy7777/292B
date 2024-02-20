@@ -77,12 +77,13 @@ class BehaviorCloningConfig(AlgoConfig):
         self.decoder.layer_dims = ()
         self.decoder.state_as_input = True
 
-        self.dynamics.type = "Unicycle"
-        self.dynamics.max_steer = 0.5
-        self.dynamics.max_yawvel = math.pi * 2.0
-        self.dynamics.acce_bound = (-10, 8)
-        self.dynamics.ddh_bound = (-math.pi * 2.0, math.pi * 2.0)
-        self.dynamics.max_speed = 40.0  # roughly 90mph
+        self.dynamcis.type = None
+        # self.dynamics.type = "Unicycle"
+        # self.dynamics.max_steer = 0.5
+        # self.dynamics.max_yawvel = math.pi * 2.0
+        # self.dynamics.acce_bound = (-10, 8)
+        # self.dynamics.ddh_bound = (-math.pi * 2.0, math.pi * 2.0)
+        # self.dynamics.max_speed = 40.0  # roughly 90mph
 
 
         self.loss_weights.prediction_loss = 1.0

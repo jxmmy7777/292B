@@ -71,6 +71,8 @@ class BehaviorCloning(pl.LightningModule):
         fde = Metrics.single_mode_metrics(
             Metrics.batch_final_displacement_error, gt, preds, avail
         )
+        #Miss Rate
+        
 
         metrics["ego_ADE"] = np.mean(ade)
         metrics["ego_FDE"] = np.mean(fde)

@@ -46,3 +46,6 @@ With the environment set up and activated, proceed to install the `trajdata` pac
     pip install -e .
     ```
 
+
+Training Command
+python scripts/train.py --dataset_path <Interactiondataset-path>  --output_dir test --checkpoint=test

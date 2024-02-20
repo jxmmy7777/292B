@@ -19,6 +19,7 @@ import me292b.dynamics as dynamics
 from me292b.utils.batch_utils import batch_utils
 from me292b.utils.tensor_utils import reshape_dimensions, flatten
 from me292b.utils.loss_utils import trajectory_loss, goal_reaching_loss, collision_loss
+
 class RasterizedMapEncoder(nn.Module):
     """A basic image-based rasterized map encoder"""
 
