@@ -1,6 +1,7 @@
 from me292b.configs.config import Dict
 from copy import deepcopy
 import math
+
 class TrainConfig(Dict):
     def __init__(self):
         super(TrainConfig, self).__init__()
@@ -30,12 +31,12 @@ class TrainConfig(Dict):
         ## training config
         self.training.batch_size = 256
         self.training.num_steps = 200000
-        self.training.num_data_workers = 0
+        self.training.num_data_workers = 4
 
         ## validation config
         self.validation.enabled = True
         self.validation.batch_size = 100
-        self.validation.num_data_workers = 0
+        self.validation.num_data_workers = 4
         self.validation.every_n_steps = 1000
         self.validation.num_steps_per_epoch = 100
         
@@ -64,7 +65,7 @@ class BehaviorCloningConfig(AlgoConfig):
         self.raster_size = 224
         self.pixel_size = 0.5
           
-        self.model_architecture = "resnet18"
+        self.model_architecture = "mobilenet_v2" #mobilenet_v2 resnet18
         self.map_feature_dim = 256
         self.history_num_frames = 9
         self.history_num_frames_ego = 9

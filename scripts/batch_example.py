@@ -10,11 +10,9 @@ from trajdata.visualization.vis import plot_agent_batch
 INTERACTIONS_DATASETS_PATH = "/mnt/hdd2/interaction_dataset/single"
 
 def main():
-    # noise_hists = NoiseHistories()
 
     dataset = UnifiedDataset(
-        # desired_data=["lyft_val"],
-        # desired_data=["waymo_train"],
+      
         desired_data=["val"],
         centric="agent",
         desired_dt=0.1,
@@ -39,15 +37,10 @@ def main():
             # "lyft_val": "~/datasets/lyft-prediction-dataset",
             "interaction_single":INTERACTIONS_DATASETS_PATH
         },
-        # extras = {
-        #     "target_actions": get_actions_inversdyn,
-        #     "is_stationary": is_stationary,
-        # },
+       
         cache_location= "/mnt/hdd2/weijer/.unified_data_cache/",
         save_index = False,
-        # filter_fn = stationary_filter
     )
-    # dataset.apply_filter(filter_fn=stationary_filter, num_workers=4)
 
     print(f"# Data Samples: {len(dataset):,}")
 
@@ -66,11 +59,9 @@ def main():
         i=i+1
         fig, ax = plt.subplots(1, 1, figsize=(12, 12))
         ax = plot_agent_batch(batch, batch_idx=0, ax=ax, close=False)
-        plt.savefig(f"/home/msc_lab/ctang/weijer/292B/visualizations/{i}_interaction_batch_example.png")
+        plt.savefig(f"{i}_interaction_batch_example.png")
         if i>=20:
             break
-# def stationary_filter(elem) -> bool:
-#     return elem.agent_meta_dict["is_stationary"]
 
 
 if __name__ == "__main__":

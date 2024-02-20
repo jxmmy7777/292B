@@ -50,14 +50,9 @@ class UnifiedDataModule(pl.LightningDataModule):
             obs_format="x,y,xd,yd,xdd,ydd,s,c",
             verbose=True,
             data_dirs={  # Remember to change this to match your filesystem!
-                # "waymo_val": "/home/msc_lab/datasets/waymo_open_dataset_motion_v_1_1_0/debug",
-                # "waymo_train": "/mnt/hdd2/waymo",
-                # "waymo_val":"/mnt/hdd2/waymo",
-                # "lyft_val": "~/datasets/lyft-prediction-dataset",
                 "interaction_single":self._train_config.dataset_path
             },
         
-            cache_location= "/mnt/hdd2/weijer/.unified_data_cache/",
             save_index = False,
             # filter_fn = stationary_filter
         )

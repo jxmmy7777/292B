@@ -9,7 +9,8 @@ from copy import deepcopy
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
-from torchvision.models.resnet import resnet18, resnet50
+from torchvision.models.resnet import resnet18
+from torchvision.models.mobilenet import mobilenet_v2
 from torchvision.models.feature_extraction import create_feature_extractor
 from torchvision.ops import RoIAlign
 
@@ -46,16 +47,43 @@ class RasterizedMapEncoder(nn.Module):
 
             pooling = nn.AdaptiveAvgPool2d((1, 1))
             self.pool_out_dim = self.conv_out_shape[0]
+            self.map_model.conv1 = nn.Conv2d(
+                self.num_input_channels, 64, kernel_size=(7, 7), stride=(2, 2), padding=(3, 3), bias=False
+                )
+            self.map_model.avgpool = pooling
+            
+            if feature_dim is not None:
+                self.map_model.fc = nn.Linear(
+                    in_features=self.pool_out_dim, out_features=feature_dim)
+            else:
+                self.map_model.fc = nn.Identity()
+        elif model_arch == "mobilenet_v2":
+            mobilenet = mobilenet_v2()
+            out_h = int(math.ceil(input_image_shape[1] / 32.))
+            out_w = int(math.ceil(input_image_shape[2] / 32.))
+            # self.conv_out_shape = (512, out_h, out_w)
+            mobilenet.features[0][0] = nn.Conv2d(
+                self.num_input_channels, 32, kernel_size=3, stride=2, padding=1, bias=False
+            )
+            # self.map_model = mobilenet.features
 
-        self.map_model.conv1 = nn.Conv2d(
-            self.num_input_channels, 64, kernel_size=(7, 7), stride=(2, 2), padding=(3, 3), bias=False
-        )
-        self.map_model.avgpool = pooling
-        if feature_dim is not None:
-            self.map_model.fc = nn.Linear(
-                in_features=self.pool_out_dim, out_features=feature_dim)
-        else:
-            self.map_model.fc = nn.Identity()
+            # The output features of MobileNetV2 is 1280 for the last layer
+            self.conv_out_shape = (1280, out_h, out_w)
+            pooling = nn.AdaptiveAvgPool2d((1, 1))
+            # Replace the default average pooling layer with an adaptive one
+            mobilenet.avgpool = pooling
+            self.pool_out_dim = self.conv_out_shape[0]
+            
+            # If you are not using the classifier part of mobilenet, you can discard it
+            # Otherwise, you will need to adjust the classifier to match your `feature_dim`
+            mobilenet.classifier = nn.Sequential(
+                nn.Linear(self.conv_out_shape[0], feature_dim),
+                output_activation()
+            )
+            
+            # Assign the modified mobilenet back to self.map_model
+            self.map_model = mobilenet
+           
 
     def output_shape(self, input_shape=None):
         if self._feature_dim is not None:
@@ -89,8 +117,8 @@ class RasterizedMapEncoder(nn.Module):
         })
 
     def forward(self, map_inputs) -> torch.Tensor:
-        feat = self.map_model(map_inputs)
-        feat = self._output_activation(feat)
+        feat = self.map_model(map_inputs) # [B, self._feature_dim]
+        feat = self._output_activation(feat) 
         return feat
 
 

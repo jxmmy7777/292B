@@ -39,7 +39,7 @@ def main(train_cfg, algo_cfg, debug=False, root_dir = ""):
         auto_insert_metric_name=False,
         save_top_k=-1,
         monitor=None,
-        every_n_train_steps=10000,
+        every_n_train_steps=1000,
         verbose=True,
     )
     train_callbacks.append(ckpt_fixed_callback)

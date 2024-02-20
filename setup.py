@@ -13,6 +13,7 @@ setup(
         'pytorch-lightning==1.8.3.post0',
         "torchvision"
         "protobuf==3.20.1"
+        "tensorboard"
         # Add other dependencies as needed
     ],
 )
