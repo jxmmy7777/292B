@@ -46,6 +46,13 @@ With the environment set up and activated, proceed to install the `trajdata` pac
     pip install -e .
     ```
 
+One may need to do the following
 
-Training Command
+```sh
+pip install torch==1.11.0+cu113 torchvision==0.12.0+cu113 torchaudio==0.11.0 torchmetrics==0.11.1 torchtext --extra-index-url https://download.pytorch.org/whl/cu113 
+pip install protobuf==3.20.1
+```
+
+
+## Training Command
 python scripts/train.py --dataset_path <Interactiondataset-path>  --output_dir test --checkpoint=test
